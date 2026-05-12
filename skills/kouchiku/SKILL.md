@@ -1,0 +1,146 @@
+---
+name: kouchiku
+description: "Design decisions, plan drafting, kill/keep/pivot evaluation, and plan execution — owns both planning and acting on the plan"
+when_to_use: "設計判断, 方針決め, design decision, kill or keep, 計画実行"
+metadata:
+  version: "2.0.0"
+---
+
+# kouchiku (構築)
+
+```
+🌲 Using /kouchiku for [purpose taken from trigger context].
+```
+
+「考える」から「作る」までを一貫で担う。設計判断 / 評価 / 計画策定だけでなく、**承認された計画の実行**まで責任を持つ。実装後のレビューは `sadoku` に渡す。
+
+## Step 0: worktree 検出
+
+```bash
+GIT_DIR=$(cd "$(git rev-parse --git-dir)" 2>/dev/null && pwd -P)
+GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
+[ "$GIT_DIR" != "$GIT_COMMON" ] && echo "(worktree内: $(git branch --show-current))"
+```
+
+## モード切替
+
+| モード | 発話トリガー | 状態トリガー | 動作 |
+|---|---|---|---|
+| 軽量検討 | `どうやって直す` / `やり方どっち` | scope < 3 file | 推奨 1 案 (file:line) + brute force 案 + 1 risk |
+| 通常検討 | `設計どうする` / `方針決めたい` / `アーキテクチャ判断` | 新機能着手前 | 推奨案 + 1 代替 (近接時のみ) + premise collapse + 攻撃検証 + 計画化 |
+| 評価 | `やる価値ある` / `採用すべきか` / `kill か keep か` / `やめる?` | — | Kill / Keep / Pivot 判定 + 3 理由 |
+| 計画実行 | `計画実行` / `進めて` / `着手` / `実装開始` | 通常検討の出力が承認直後 | 計画を実行、各 step で検証、完了報告まで |
+
+通常検討 → 計画実行は同じ skill 内で連続して走る。sadoku に渡すのは実装が完了して PR を作る段階。
+
+## 軽量検討モード
+
+scope < 3 file の修正方法選択。出力は短く:
+
+```
+推奨:    [案、file:line で示す]
+brute:   [雑にやるならこれ]
+risk:    [採用時の最大の懸念 1 つ]
+```
+
+3 案以上は提示しない (paralysis を避ける)。
+
+## 通常検討モード
+
+新機能 / アーキテクチャ判断。
+
+**思考の手順**
+
+1. **問題定義**: 何を解決するか、何を解決しないか (out-of-scope) を分ける
+2. **推奨案を 1 つ**: file:line / 関連 module / 影響範囲を具体的に
+3. **代替案は近接時のみ 1 つ**: 推奨と近い (= 議論する価値がある) ものだけ。遠い案は出さない
+4. **前提崩し**: 「この設計が前提としている事実」を 3-5 個列挙し、それぞれが崩れたらどうなるかを評価
+5. **攻撃検証**: 「この案を採用した 6 ヶ月後に最も後悔するシナリオは?」を 1 つ書く
+6. **計画化**: 計画実行モードに渡せる形 (step / file / 検証コマンド) で出力
+
+**出力形式**
+
+```
+Building:        [何を作る、1 段落]
+Not building:    [out-of-scope、1-3 項目]
+Approach:        [選んだ案 + 根拠]
+Key decisions:   3-5 項目 (それぞれ「なぜ別の選択肢を捨てたか」を 1 行)
+Premises:        この設計が依存している事実 3-5 個
+Worst case:      6 ヶ月後に最も後悔するシナリオ
+Unknowns:        defer 理由 + 担当明記の項目のみ
+Plan steps:      実装単位 (計画実行モードで使う形)
+```
+
+## 評価モード
+
+Kill / Keep / Pivot のいずれか + 3 理由を即座に出す。判断軸は **ユーザの制約** (時間 / 人員 / 顧客約束 / 競合状況)。技術的な好みだけで決めない。
+
+```
+Verdict:    Kill / Keep / Pivot
+Reasons:    1. [user constraint に紐づく理由]
+            2. ...
+            3. ...
+If pivot:   [何に方向転換するか、1 段落]
+```
+
+3 択以外は出さない (「保留」は判断回避)。
+
+## 計画実行モード
+
+承認済みの計画を実行する。前提: 通常検討モードの出力に推奨案 / Key decisions / Plan steps が含まれている。
+
+**手順**
+
+1. 計画を再読し、不明点があれば確認を投げる
+2. step ごとに inline で実装 (subagent には委譲しない、TDD 必要層なら `shiken` に切り替え)
+3. 各 step 完了後に検証 (test / lint / type-check / 手動確認)
+4. scope 外の発見は実装せず「実装中に分かったこと」に記録 (後で `sadoku` の PR 説明文モードで参照)
+5. 完了報告を出力 → `sadoku` に PR レビューを渡す
+
+**TDD 必要層を踏むときの分岐**
+
+純ロジック / API / バグ修正 などの強制レイヤーに触れる場合は、計画実行を一時停止して `shiken` (TDD) のサイクルに入る。GREEN → PRUNE を終えてから次の step に戻る。
+
+## 停止条件
+
+- 破壊的な自動実行 (`rm -rf`, `git reset --hard`, force push 等) は明示確認なしに走らせない
+- 計画にない変更を勝手にしない (scope 外の発見は記録のみ、実装しない)
+- 検証コマンドが失敗したら次の step に進まない、原因を `tansaku` で追跡
+- 5+ ファイル touch が計画に無いのに発生したら停止、scope を再確認
+
+## Hard Rules
+
+- 計画実行モード以外では code を書かない (= 検討 / 評価モードでは plan / verdict だけを返す)
+- 3 案以上は出さない (paralysis 防止)
+- 前提崩し / 攻撃検証を埋めずに通常検討モードの出力を返さない
+- 評価モードは user 制約を根拠にする (技術的な好みだけで Kill/Keep を決めない)
+
+## 承認後の文言
+
+通常検討モードの出力が承認されたら、以下の文言で計画実行モードに移行することを告げる:
+
+```
+Plan approved. このまま実装する場合は「計画実行」「進めて」「着手」と発話してください。
+実装完了後は /sadoku に渡してレビューします。
+```
+
+## subagent
+
+判断 skill のため、判断の対象となる情報を集める段階で gate (a) に該当する場合のみ subagent を 1 つ起動する (例: 候補 library 3 つの最新動向を比較する Web 横断調査)。判断そのものは inline で controller が行う。計画実行モードでは inline 実行が原則 (gate (c) に該当する機械 fan-out のみ subagent 検討可)。
+
+## 完了記録
+
+検討 / 評価モードの出力は環境変更を伴わないため検証ログ不要。計画実行モードの出力は環境変更を伴うため検証ログ必須。
+
+```
+mode:              軽量検討 / 通常検討 / 評価 / 計画実行
+worktree:          in-worktree / normal-repo
+output type:       plan / verdict / evaluation / execution-result
+handoff target:    sadoku (PR レビュー) / none
+
+# 計画実行モードのみ
+steps done:        N (of M planned)
+verification:      [command] -> pass / fail
+                     検証ログ: [出力末尾 3-5 行、失敗時は full error]
+scope drift:       on target / drift: [何を別 issue に切り出したか]
+```

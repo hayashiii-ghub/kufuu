@@ -1,0 +1,17 @@
+# wt が作る worktree (この repo を試験台にしたとき用)
+.worktrees/
+
+# macOS
+.DS_Store
+
+# editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# Claude Code session artifacts (if any are accidentally created here)
+.claude/
+
+# 一時テスト出力
+/tmp/
