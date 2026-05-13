@@ -67,7 +67,27 @@ GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
 - 過去の修正 commit を grep し、回帰した経路を特定
 - regression guard test を必ず追加 (`shiken` のフォーマットに従う)
 
-## Handoff
+## Handoff Intake
+
+`kouchiku` または user から呼ばれる時に期待する入力。足りない場合は推測で補完せず、停止条件として扱い、欠落項目を呼び出し元に問い合わせる。
+
+```
+handoff: tansaku
+reason: [原因未確定 / 予期しない test failure / 再現不明 の理由]
+symptom: [何が起きているか、1 文]
+expected: [本来こうあるべき値 / 挙動]
+actual: [実際こうなっている値 / 挙動]
+evidence:
+  - [error message / stack trace / log]
+  - [再現手順]
+scope hint:
+  - [影響範囲 / 直前の変更 / 触ったファイル]
+expected return:
+  - root cause (1 文)
+  - fix 候補 (実装は呼び出し元に戻す、または shiken に forward)
+```
+
+## Handoff Forward
 
 原因が確定したら、bugfix 実装や regression guard が必要な場合は `shiken` に渡す。tansaku は root cause と再現条件を固定し、TDD の実装 discipline は持ち込まない。
 
