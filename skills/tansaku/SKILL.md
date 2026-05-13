@@ -13,7 +13,7 @@ metadata:
 🌲 Using /tansaku for [purpose taken from trigger context].
 ```
 
-> **hypothesis を 1 文書けるまで実装変更しない。「とりあえず試す」「自信ある」は調査不足のサイン。**
+> **hypothesis を 1 文書けるまで実装を変更しない。「とりあえず試す」「自信ある」は調査不足のサイン。**
 
 バグ / テスト失敗 / 予期せぬ挙動の root cause investigation。
 
@@ -35,14 +35,14 @@ GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
 
 ## Hard Rules
 
-- root cause を 1 文で言語化できるまで実装変更しない (`I believe the root cause is [X] because [evidence].`)
+- root cause を 1 文で言語化できるまで実装を変更しない (`I believe the root cause is [X] because [evidence].`)
 - grep / read / log 収集 / test 再現は調査行為であり「code を触る」には含めない
 - 同じ症状が修正後も残る = 停止、hypothesis 再構築
-- 3 回失敗したら handoff フォーマットで停止、ユーザに proceed 判断を求める
+- 3 回失敗したら handoff フォーマットで停止し、ユーザに proceed 判断を求める
 - 視覚バグは静的解析優先 (paint / layer trace を先に読む)
-- fix が 5+ ファイル touch なら scope 確認 (= 別 bug の可能性)
+- fix が 5+ ファイルに touch するなら scope 確認 (= 別 bug の可能性)
 - `Never state from memory. Run grep first.` (識別子・呼び出し関係は実物を確認、記憶で答えない)
-- 外部事実 (OSS の現行仕様 / 最新バージョン / 標準) は知識カットオフ後の可能性、利用可能な検索・fetch・一次ソースで裏取りしてから引用する (§3.10 ファクトチェック原則)
+- 外部事実 (OSS の現行仕様 / 最新バージョン / 標準) は知識カットオフ後の可能性があるため、利用可能な検索・fetch・一次ソースで裏取りしてから引用する (§3.10 ファクトチェック原則)
 
 ## 通常追跡モード
 
@@ -72,7 +72,7 @@ GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
 3+ の独立した test failure (異なるファイル / サブシステム / 共有 state 無し) のときのみ並列起動許可、最大 3。各 subagent は症状抽出と hypothesis 形成までを担当し、fix 実行は親 controller に戻す。
 
 並列起動禁止:
-- 同一 root cause 疑いのある複数 failure (= 1 つの hypothesis で同時に解決する可能性)
+- 同一 root cause の疑いがある複数 failure (= 1 つの hypothesis で同時に解決する可能性)
 - ファイル横断的に state を共有する failure (race 等)
 - UI / 視覚絡み (目視必須)
 
