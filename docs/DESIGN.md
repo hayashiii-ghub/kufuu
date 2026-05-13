@@ -315,9 +315,9 @@ expected return:
 
 ### 4.2 `kouchiku` (構築) — 考える・作る
 
-軽量検討 / 通常検討 / 評価 / 計画実行の 4 モード。設計から計画実行までを controller として持つ。
+軽量検討 / 通常検討 / 評価 / 計画実行の 4 モード。設計から計画実行までを controller として担う。
 
-通常検討モードの出力は前提崩し / 攻撃検証 / owner skill 付き Plan steps を必ず含む。承認後に「計画実行」「進めて」で同 skill 内の計画実行モードへ移行。計画実行中に原因未確定の挙動へ当たったら `tansaku`、TDD 必要層に触れたら `shiken` に handoff する。実装完了後は `sadoku` に PR レビューを渡す。
+通常検討モードの出力は前提崩し / 攻撃検証 / owner skill 付き Plan steps を必ず含む。承認後に「計画実行」「進めて」で同 skill 内の計画実行モードへ移行。計画実行中に原因未確定の挙動に遭遇したら `tansaku`、TDD 必要層に触れたら `shiken` に handoff する。実装完了後は `sadoku` に PR レビューを渡す。
 
 ### 4.3 `tansaku` (探索) — 追う
 
