@@ -425,6 +425,35 @@ GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
 
 **形式**: mermaid に統一 (テキスト diff、git 親和性、code review の流れに乗る)
 
+### 判断 20: ハーネス agnostic 化を adapters/ 構造で実現
+
+**結論**: skill 本体 (`skills/`) はハーネス (Claude Code / Cursor / Codex 等) agnostic な SoT として保ち、各ハーネス固有の配置 / 変換は `adapters/<harness>/` に隔離する。`AGENTS.md` を root に置いて補助 instruction 標準にも対応。
+
+**理由**:
+- kufuu は **multi file pack** (skill 4 + references + agents)。single file 標準 (AGENTS.md だけ / `.cursorrules` だけ) では skill 切り分けができない
+- 各ハーネス用 dir (`.claude/` `.cursor/` `.codex/`) を root に並べる構造はメンテ地獄 (アンチパターン)
+- 「SoT + 変換 adapter」は新ハーネス対応時に `adapters/<name>/` を 1 つ作るだけで済む
+
+**実装フェーズ**:
+
+| Phase | 内容 | きっかけ |
+|---|---|---|
+| 0 | `skills/` SoT + Claude Code symlink 案内 (旧 README) | 初版 |
+| **1** | `adapters/claude-code/` 作成、root README から deploy 手順を移動 | 対称性確保 |
+| **2** | `AGENTS.md` 追加 (repo 入口、ツール agnostic) | 他ツール対応の宣言 |
+| **3 (土台)** | `adapters/cursor/` `adapters/codex/` スケルトン作成 (TODO + 変換マッピング案のみ) | 着手見込みの可視化 |
+| 4 (将来) | SKILL.md 内の Claude Code 固有用語 (Task, TodoWrite) を抽象化 | 2 個目の adapter 実装と同時 |
+| 5 (将来) | 各 adapter の `generate.sh` / 動作確認 | 実利用者からの要望で個別着手 |
+
+**採用しない選択肢**:
+- ❌ `.cursor/` `.codex/` `.claude/` を root に並列 (重複メンテ地獄)
+- ❌ 需要が無いうちから空の adapter を作りすぎる (YAGNI 違反、土台のみで止める)
+- ❌ AGENTS.md だけで済ませる (multi file pack の skill 切り分けができない)
+
+**形式の判断**:
+- `AGENTS.md` は OpenAI 提唱の標準、Cursor 等が対応進行中。kufuu でも入口として置く価値あり (補助、SoT は skills/)
+- adapter 内の変換は需要が出てから (引き算原則の YAGNI と整合)
+
 ---
 
 ## 7. 残タスク
