@@ -120,7 +120,7 @@ wt new feat-B --launch claude  # 作成して Claude を起動
 9. **工数はトークンベース**: 判断軸を「行数 / 人間時間」から「token 消費 / context 占有 / API コスト」に切り替え。実行者は AI agent 前提 (§3.9 / 判断 22)
 10. **ファクトチェック**: 知識カットオフ後 / 不確実な事実は Perplexity / Grok / WebSearch / 一次ソース fetch で裏取りしてから断定 (§3.10 / 判断 23)
 
-詳細と 23 件の設計判断ログは `docs/DESIGN.md` を参照。
+詳細と 24 件の設計判断ログは `docs/DESIGN.md` を参照。
 
 ## ディレクトリ構成
 
