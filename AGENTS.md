@@ -11,7 +11,7 @@
   - `shiken` (試験) — TDD discipline / PRUNE
 - **設計原則と判断ログ** は `docs/DESIGN.md`
 - **使い方ガイド** は `docs/workflow.md` (mermaid 図入り)
-- **配置** は `npx skills add github:hayashiii-ghub/kufuu` (Agent Skills 標準に沿った skill pack、judgment 21)。`adapters/` は標準でカバーできない特殊ケース用の予約領域 (現状は `adapters/README.md` のみ)
+- **配置** は `npx skills add github:hayashiii-ghub/kufuu` (Agent Skills 標準に沿った skill pack、判断 21)。`adapters/` は標準でカバーできない特殊ケース用の予約領域 (現状は `adapters/README.md` のみ)
 
 ## このリポジトリでの作業ルール
 

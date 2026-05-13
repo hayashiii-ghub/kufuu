@@ -64,7 +64,7 @@ flowchart TB
 
 ## 2. 典型ワークフロー A: 新機能実装
 
-issue 受領から PR 出荷まで。**kouchiku** が「考える」から「作る」までを一気通貫。
+issue 受領から PR 出荷まで。**kouchiku** が「考える」から「作る」までを一気通貫で担う。
 
 ```mermaid
 flowchart TB
@@ -200,6 +200,58 @@ flowchart TB
 ---
 
 ## 7. skill 間 handoff 表
+
+「誰から誰へ」「きっかけ」「渡すもの」を一括で見る図。矢印ラベルは **上段＝きっかけ / 下段＝渡すもの**。
+
+```mermaid
+flowchart TB
+  U["user"]
+
+  subgraph KC["kouchiku（構築）"]
+    direction TB
+    KT["通常検討"]
+    KK["軽量検討"]
+    KH["評価"]
+    KJ["計画実行"]
+  end
+
+  SH["shiken（試験）"]
+
+  subgraph SD["sadoku（査読）"]
+    direction TB
+    SR["通常レビュー"]
+    SPR["PR 説明文"]
+  end
+
+  SUB["subagent<br/>reviewer-*"]
+  TA["tansaku（探索）"]
+
+  U -->|"設計どうする<br/>────────<br/>issue + DoD"| KT
+  U -->|"どうやって直す<br/>────────<br/>修正対象"| KK
+  U -->|"やる価値ある<br/>────────<br/>判断対象"| KH
+
+  KK -.->|"案確定後<br/>進めて"| KJ
+  KH -.->|"判断後<br/>実装へ"| KJ
+
+  KT -->|"計画実行 / 進めて<br/>────────<br/>Plan steps"| KJ
+
+  KJ -->|"TDD 必要層に触れた<br/>────────<br/>レイヤー判定 + コード"| SH
+  SH -->|"サイクル完了<br/>────────<br/>green 状態のコード"| KJ
+
+  KJ -->|"実装完了<br/>────────<br/>完成 diff"| SR
+
+  U -->|"レビューして<br/>────────<br/>diff"| SR
+
+  SR -->|"gate (b)<br/>────────<br/>diff + 範囲"| SUB
+  SUB -->|"評価完了<br/>────────<br/>findings（要裏取り）"| SR
+
+  SR -->|"PR文書いて<br/>────────<br/>レビュー済 diff + scope"| SPR
+
+  U -->|"エラー / 動かない<br/>────────<br/>バグ症状"| TA
+  TA -->|"bugfix 確定<br/>────────<br/>regression guard 要件"| SH
+```
+
+### 詳細（表形式）
 
 | from                 | to                     | きっかけ                    | 何を渡す              |
 | -------------------- | ---------------------- | --------------------------- | --------------------- |

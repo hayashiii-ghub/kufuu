@@ -16,7 +16,7 @@
 | `tansaku` | 探索 | 追う | バグ調査 / root cause investigation |
 | `shiken` | 試験 | 試す | TDD discipline / PRUNE |
 
-動詞で 4 分割した役割境界が原則。`sadoku` は実装行為を含まない、`kouchiku` が設計から実装までを一気通貫、`tansaku` はバグ専用、`shiken` は TDD discipline 専用。
+動詞で 4 分割した役割境界が原則。`sadoku` は実装行為を含まない、`kouchiku` が設計から実装までを一気通貫で担う、`tansaku` はバグ専用、`shiken` は TDD discipline 専用。
 
 ## install
 
@@ -173,4 +173,4 @@ kufuu/
 
 ## contributing
 
-issues / PRs welcome。新しい skill 追加よりも、既存 skill の磨き込みを優先する pack 哲学です (詳細は `docs/DESIGN.md` の判断 13 を参照)。
+issues / PRs を歓迎します。新しい skill 追加よりも、既存 skill の磨き込みを優先する pack 哲学です (詳細は `docs/DESIGN.md` の判断 13 を参照)。
