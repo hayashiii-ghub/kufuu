@@ -1,6 +1,6 @@
 # kufuu 設計書
 
-**バージョン**: 3.3
+**バージョン**: 3.4
 **更新日**: 2026-05-13
 **ベース**: tw93/Waza skill 群
 **対象**: Agent Skills 対応 agent / skill pack 配布
@@ -716,6 +716,45 @@ GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
 **他原則との関係**:
 - §3.5 (日本語圏最適化) の延長、適用範囲を「skill 内容」から「agent 応答」まで広げた
 - §3.7 (散文の 4 チェック) の「語彙が読み手のもの」と同根
+
+### 判断 28: simplify 相当を sadoku の新 mode として取り込み
+
+**結論**: claude-code の `simplify` 相当 (重複削除 / 命名統一 / 不要な抽象化除去 / dead code / efficiency) を、新 skill ではなく `sadoku` の新モード **simplify findings** として取り込む。発見は sadoku、実装は kouchiku に handoff 委譲し、sadoku の「見る・書く」純化 (判断 14) と整合させる。`コードレビュー` / `コードレビューして` は compound trigger として通常レビュー → simplify findings を順に実行。
+
+**動機**:
+- 「書いた後の production code 整理」工程が core 4 で明示的に持たれていなかった (shiken PRUNE は test 専用、§3.8 引き算原則は meta-principle のみ、sadoku 停止条件「テスト最小性違反」は test 寄り)
+- claude-code に `simplify` コマンドが存在し、kufuu でも同等の発見能力が欲しい (運用実感)
+- §3.8 引き算原則の operationalization (per-PR で actionable な判定基準に落とす)
+
+**採用しなかった案**:
+
+| 案 | 不採用理由 |
+|---|---|
+| A. 新 skill `seiri` (整理) を立てる | 判断 13 (Phase 1 slim 化、4 skill 限定) を覆す必要があり、現状の運用実績で覆すまでの根拠はない。学習コスト + 1 skill |
+| B. 新 skill `hikizan` (引き算) | §3.8「引き算原則」と命名衝突、概念の二重化 |
+| C. `kouchiku` 計画実行に「整理 phase」を追加 | controller の責務が膨らみ、判断 26 の dispatcher 原則 (kouchiku は専門 skill の責務を内包しない) と矛盾 |
+
+**設計のポイント**:
+
+1. **発見と実装を分離**: sadoku は発見と提案まで、実装は kouchiku に handoff block で委譲 (判断 14 と整合)
+2. **明示 opt-in only**: simplify findings モードは発話 trigger のみ、state trigger を持たない (default 通常レビューを汚染しない、worst case 防御)
+3. **severity 付き**: high / medium / low、kouchiku に振るのは high severity が default。medium / low は user 判断 (PR 説明文の「実装中に分かったこと」に記録 or 据え置き)
+4. **compound trigger**: `コードレビュー` は通常レビュー + simplify findings の両方を順に実行 (語の重みで thoroughness を識別)、ただし出力は独立 section で混ざらない
+
+**worst case 対策**:
+- 些細な指摘ばかり出て critical 指摘 (停止条件) が埋もれるリスク → severity 付け + 独立 section 出力 + 「findings: 0 なら明示」ルールで対応
+- claude-code simplify は「自分で fix する」が、kufuu は discipline 分離を保つために「propose + delegate」を採用
+
+**他原則との関係**:
+- §3.8 引き算原則 の operationalization (meta-principle → per-PR 判定基準)
+- 判断 12 (shiken PRUNE) と相補 (PRUNE = test 専用、simplify findings = production code 専用)
+- 判断 14 (sadoku 純化) を守る (sadoku は実装しない、発見と提案のみ)
+- 判断 26 (skill 間 handoff 固定 block 化) を継承 (high severity は kouchiku に handoff block で渡す)
+
+**運用観察項目** (3 ヶ月後に判断 04 と同じく実害ベースで再評価):
+- simplify findings の採用率 (high severity → 実装に至る割合)
+- compound trigger 経由の利用頻度 (= 「コードレビュー」と発話する頻度)
+- 些細な指摘で critical が埋もれた事例の有無
 
 ---
 

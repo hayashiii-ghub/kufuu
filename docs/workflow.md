@@ -5,7 +5,7 @@ description: sadoku / kouchiku / tansaku / shiken の境界と典型フロー
 
 # Skill ワークフロー例
 
-> **対象設計書:** `DESIGN.md` v3.3
+> **対象設計書:** `DESIGN.md` v3.4
 > **目的:** 「ユーザーがこう書くと、skill がこう振る舞う」を視覚的に追いやすくする。
 
 ---
@@ -50,6 +50,7 @@ flowchart TB
   BUILD -->|"TDD 必要層"| TEST
   TEST -->|"検証ログ付き return"| BUILD
   BUILD -->|"実装完了"| REVIEW
+  REVIEW -.->|"simplify finding<br/>(high severity)"| BUILD
 ```
 
 ### skill 一覧
@@ -164,12 +165,14 @@ flowchart TB
 
 ### sadoku
 
-| 種類           | trigger の例                                           | 遷移先           |
-| -------------- | ------------------------------------------------------ | ---------------- |
-| ユーザー発話   | 「レビューして」「コードレビュー」                     | 通常レビュー     |
-| ユーザー発話   | 「PR文書いて」「PR description」                     | PR 説明文        |
-| 状態           | git diff 検出 → 「レビューしますか?」                  | 通常レビュー     |
-| 状態           | PR open 直前                                         | 確認 prompt      |
+| 種類           | trigger の例                                                          | 遷移先                              |
+| -------------- | --------------------------------------------------------------------- | ----------------------------------- |
+| ユーザー発話   | 「レビューして」                                                       | 通常レビュー                        |
+| ユーザー発話   | 「整理して」「simplify」「整理ポイントある?」「スリム化したい」          | simplify findings                   |
+| ユーザー発話   | 「コードレビュー」「コードレビューして」(compound)                     | 通常レビュー → simplify findings    |
+| ユーザー発話   | 「PR文書いて」「PR description」                                       | PR 説明文                           |
+| 状態           | git diff 検出 → 「レビューしますか?」                                  | 通常レビュー                        |
+| 状態           | PR open 直前                                                          | 確認 prompt                         |
 
 > reviewer コメント対応は **skill のモードにしない**。通常会話で「返信書いて」と頼む形。
 
@@ -223,6 +226,7 @@ flowchart TB
   subgraph SD["sadoku（査読）"]
     direction TB
     SR["通常レビュー"]
+    SS["simplify findings"]
     SPR["PR 説明文"]
   end
 
@@ -244,6 +248,10 @@ flowchart TB
   KJ -->|"実装完了<br/>────────<br/>完成 diff"| SR
 
   U -->|"レビューして<br/>────────<br/>diff"| SR
+  U -->|"整理して / simplify<br/>────────<br/>diff (範囲)"| SS
+  U -->|"コードレビュー (compound)<br/>────────<br/>diff"| SR
+  SR -.->|"compound 起動時<br/>────────<br/>レビュー後に連結"| SS
+  SS -->|"simplify finding (high)<br/>────────<br/>対象 finding + file:line"| KJ
 
   SR -->|"gate (b)<br/>────────<br/>diff + 範囲"| SUB
   SUB -->|"評価完了<br/>────────<br/>findings（要裏取り）"| SR
@@ -272,6 +280,9 @@ flowchart TB
 | sadoku 通常レビュー  | subagent (reviewer-*)  | gate (b)                    | diff + 範囲           |
 | subagent             | sadoku                 | 評価完了                    | findings（要裏取り）  |
 | sadoku 通常レビュー  | sadoku PR 説明文       | 「PR文書いて」              | レビュー済 diff + scope |
+| (user)               | sadoku simplify findings | 「整理して」「simplify」  | diff (範囲)           |
+| sadoku 通常レビュー  | sadoku simplify findings | compound (「コードレビュー」) | レビュー後の連結実行 |
+| sadoku simplify findings | kouchiku 計画実行  | simplify finding (high)     | 対象 finding + file:line |
 | (user)               | tansaku                | 「エラー」「動かない」      | バグ症状              |
 
 handoff block の共通形:

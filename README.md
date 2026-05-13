@@ -100,6 +100,8 @@ wt new feat-B --launch claude  # 作成して Claude を起動
 "設計どうする"           → kouchiku 通常検討
 "計画実行" / "進めて"     → kouchiku 計画実行
 "レビューして"           → sadoku 通常レビュー
+"整理して" / "simplify"   → sadoku simplify findings
+"コードレビュー"          → sadoku 通常レビュー + simplify (compound)
 "PR文書いて"            → sadoku PR 説明文
 "エラー" / "動かない"     → tansaku 通常追跡
 "TDDで" / "テストから書いて" → shiken
@@ -120,7 +122,7 @@ wt new feat-B --launch claude  # 作成して Claude を起動
 9. **工数はトークンベース**: 判断軸を「行数 / 人間時間」から「token 消費 / context 占有 / API コスト」に切り替え。実行者は AI agent 前提 (§3.9 / 判断 22)
 10. **ファクトチェック**: 知識カットオフ後 / 不確実な事実は利用可能な検索・fetch・一次ソースで裏取りしてから断定 (§3.10 / 判断 23)
 
-詳細と 27 件の設計判断ログは `docs/DESIGN.md` を参照。
+詳細と 28 件の設計判断ログは `docs/DESIGN.md` を参照。
 
 ## ディレクトリ構成
 
@@ -139,6 +141,7 @@ kufuu/
 │   │       ├── pr-template.md
 │   │       ├── project-context.md
 │   │       ├── persona-catalog.md
+│   │       ├── simplify-checklist.md
 │   │       └── agents/
 │   │           ├── reviewer-security.md
 │   │           └── reviewer-architecture.md
@@ -152,7 +155,7 @@ kufuu/
 ├── adapters/                    ← Agent Skills 標準でカバーできない特殊ケース用 (現状は予約領域)
 │   └── README.md
 └── docs/                        ← 設計ドキュメント
-    ├── DESIGN.md                ← 設計書 + 設計判断ログ 27 件 (開発者向け)
+    ├── DESIGN.md                ← 設計書 + 設計判断ログ 28 件 (開発者向け)
     └── workflow.md              ← 使い方ガイド (利用者向け、mermaid 図入り)
 ```
 

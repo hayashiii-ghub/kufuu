@@ -1,8 +1,8 @@
 ---
 name: sadoku
-description: "PR code review and PR description authoring. Use when asked レビューして, コードレビュー, PR文書いて, or PR description; also when reviewing a git diff before opening a PR."
+description: "PR code review, simplify findings, and PR description authoring. Use when asked レビューして, コードレビュー, 整理して, simplify, PR文書いて, or PR description; also when reviewing a git diff before opening a PR."
 license: MIT
-when_to_use: "PR確認, レビュー, code review, PR description"
+when_to_use: "PR確認, レビュー, code review, 整理, simplify, PR description"
 metadata:
   version: "3.0.0"
 ---
@@ -13,7 +13,7 @@ metadata:
 🌲 Using /sadoku for [purpose taken from trigger context].
 ```
 
-「diff を見る・書く」に純化した skill。通常レビューと PR 説明文の 2 モード。実装行為 (計画実行) は `kouchiku`、TDD は `shiken`、バグ調査は `tansaku` に分離。reviewer コメントへの返信文ドラフトや個別対応は skill mode 化せず通常会話で対応する (分類・咀嚼工程は人間判断のままにする)。
+「diff を見る・書く」に純化した skill。通常レビュー / simplify findings / PR 説明文の 3 モード。実装行為 (計画実行) は `kouchiku`、TDD は `shiken`、バグ調査は `tansaku` に分離。reviewer コメントへの返信文ドラフトや個別対応は skill mode 化せず通常会話で対応する (分類・咀嚼工程は人間判断のままにする)。
 
 ## Step 0: worktree 検出
 
@@ -29,8 +29,11 @@ GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
 
 | モード | 発話トリガー | 状態トリガー |
 |---|---|---|
-| 通常レビュー | `レビューして` / `コードレビュー` | diff 検出 |
+| 通常レビュー | `レビューして` | diff 検出 |
+| simplify findings | `整理して` / `simplify` / `整理ポイントある?` / `スリム化したい` | — |
 | PR 説明文 | `PR文書いて` / `PR description` | PR open 直前 |
+
+**compound trigger**: `コードレビュー` / `コードレビューして` は **通常レビュー → simplify findings** を順に実行する (それぞれ独立 section として出力)。
 
 状態トリガーは誤発火回避のため、検出後に確認 prompt を 1 行挟む (`diff を検出しました。レビューしますか?`)。複数モードが成立しうる場合は発話トリガーを優先。
 
@@ -77,6 +80,65 @@ review focus:
 **専門家レビューの起動 — gate (b)**
 
 Standard 以上で security / architecture 観点が必要な場合のみ subagent 起動。条件と persona は `references/persona-catalog.md`。subagent 成果物は必ず main 側で git diff / file 読み / test 再実行で裏取り。
+
+## simplify findings モード
+
+実装後の production code を「整理」観点 (重複削除 / 命名統一 / 不要な抽象化除去 / dead code 削除 / efficiency 改善) で review し、**findings を出すが実装はしない**。実装は kouchiku に handoff block で委譲する。
+
+- **発話 trigger only** (state trigger を持たない、default の通常レビューに含めない)
+- **`コードレビュー` 経由の compound 起動時**: 通常レビューの完了後、独立 section として simplify findings を出す (severity 順位で混ざらないようにする)
+- **severity 付き** で出す: high / medium / low、kouchiku に振るのは high severity のみが default
+
+### 5 観点
+
+詳細と各観点の判定基準は `references/simplify-checklist.md` を参照。
+
+| 観点 | 例 |
+|---|---|
+| 重複 | 3 箇所以上の類似 code、共通化候補 |
+| 命名 | 同 module 内の命名揺れ、慣用と外れる用語 |
+| 不要な抽象化 | 1 箇所からしか呼ばれない wrapper、premature な generic |
+| dead code | 未使用 export / private function / 到達不能 branch |
+| efficiency | 明らかな改善余地 (O(n²) → O(n) 等、計測不要な範囲) |
+
+### 出力フォーマット
+
+```
+## simplify findings
+
+scope:     [対象 file / 範囲]
+
+### finding 1
+severity:  high / medium / low
+category:  重複 / 命名 / 抽象化 / dead code / efficiency
+file:      path:line-range
+issue:     [問題、1-2 文]
+evidence:  [該当コード片 1-3 行を引用、そのまま]
+recommend: [提案、1-2 文]
+handoff:   kouchiku (high severity のみ) / user 判断 (medium / low)
+
+### finding 2
+...
+```
+
+findings が 0 件なら `findings: 0` を明示。
+
+### handoff (実装委譲)
+
+high severity finding は kouchiku に handoff block で実装委譲する:
+
+```
+handoff: kouchiku
+reason: simplify finding (high severity) の反映実装
+context: [対象 finding の category + file:line]
+evidence:
+  - [該当コード片]
+expected return:
+  - 整理後の diff
+  - verification log (test pass / lint pass)
+```
+
+medium / low は PR 説明文の「実装中に分かったこと」に記録するか、据え置き判断を user に委ねる。
 
 ## PR 説明文モード
 
@@ -126,3 +188,4 @@ PII scan:         clean / found: [...]
 - `project-context.md` — diff 読解時の文脈抽出方針
 - `persona-catalog.md` — 専門家レビュー (security / architecture / adversarial) の persona 起動条件
 - `agents/reviewer-security.md` / `agents/reviewer-architecture.md` — 専門家レビュー subagent prompt
+- `simplify-checklist.md` — simplify findings モードの 5 観点判定基準と書き直し方

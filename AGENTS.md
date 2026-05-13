@@ -35,7 +35,9 @@
 
 | skill | mode | 発話 trigger |
 |---|---|---|
-| `sadoku` (査読) | 通常レビュー | `レビューして` / `コードレビュー` |
+| `sadoku` (査読) | 通常レビュー | `レビューして` |
+| `sadoku` | simplify findings | `整理して` / `simplify` / `整理ポイントある?` / `スリム化したい` |
+| `sadoku` | 通常レビュー + simplify (compound) | `コードレビュー` / `コードレビューして` |
 | `sadoku` | PR 説明文 | `PR文書いて` / `PR description` |
 | `kouchiku` (構築) | 軽量検討 | `どうやって直す` / `やり方どっち` |
 | `kouchiku` | 通常検討 | `設計どうする` / `方針決めたい` / `アーキテクチャ判断` |
