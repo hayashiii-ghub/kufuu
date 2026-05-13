@@ -13,17 +13,17 @@ console.log('FOO', { input, intermediate });
 return result;
 ```
 
-**注意**: 出力過多になりやすい。**1 関数 1 ログ**を原則、関数名を tag (`FOO`, `BAR`) で区別する。
+**注意**: 出力過多になりやすい。**1 関数 1 ログ**を原則とし、関数名を tag (`FOO`, `BAR`) で区別する。
 
 ### 2. breakpoint / debugger
 
-**用途**: 状態が複雑、ステップ実行で stack frame を見たいとき
+**用途**: 状態が複雑で、ステップ実行で stack frame を見たいとき
 
 ```js
 debugger;  // または IDE 上で行クリック
 ```
 
-**注意**: production code には残さない、`.skip` と同じく commit 前に grep で削除。
+**注意**: production code には残さない。`.skip` と同じく commit 前に grep で削除する。
 
 ### 3. git log -S "string"
 

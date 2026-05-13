@@ -43,7 +43,7 @@ scope:     [評価範囲、controller から渡された通り]
 
 ### finding 1
 severity:  critical / high / medium / low / info
-category:  結合度 / 凝集度 / 抽象化 / 命名 / 拡張余地 / 公開API
+category:  結合度 / 凝集度 / 抽象化 / 命名 / 拡張余地 / 公開 API
 file:      path:line-range
 issue:     [1-2 文で問題を記述]
 evidence:  [該当コード片 1-3 行を引用、そのまま]

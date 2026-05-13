@@ -75,7 +75,7 @@ prompt 詳細: `references/agents/reviewer-architecture.md`
 - 悪意ユーザの行動 (= security と重複しない範囲、主に整合性破壊)
 - error path が silent fail にならないか
 
-**注意**: adversarial persona は controller が**inline** で実行する (subagent には委譲しない、視覚判断含むため)。
+**注意**: adversarial persona は controller が**inline** で実行する (subagent には委譲しない、視覚判断を含むため)。
 
 ## 起動判定で迷ったとき
 
