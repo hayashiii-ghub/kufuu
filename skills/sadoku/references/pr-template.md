@@ -74,6 +74,17 @@
 
 「自然な文章」を抽象的に求めない (判定は読み手任せで指針にならない)。AI 臭リストは作らない (model 世代で症状が変わる、固定リストは陳腐化、単語狩りは perverse incentive)。
 
+## 図優先 (§3.8 引き算原則)
+
+構造化できる情報は、散文より **表 / mermaid / box diagram を優先**。
+
+- 「実装の流れとレビュー順」の step が 5+ なら、mermaid flowchart で全体像を冒頭に
+- 「変更前後の対比」は表 (before/after の 2 列) で
+- データ構造の変更は box diagram で
+- 判断のニュアンス (なぜこの選択をしたか) は散文で残す
+
+レビュアーが PR を初見で 30 秒以内に骨格を把握できる構成を目指す。散文だけで「読めば分かる」状態は引き算原則違反。
+
 ## PII / Secrets scan
 
 PR 説明文 / commit message / release notes 出力前に最低限以下を grep:
