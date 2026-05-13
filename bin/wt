@@ -337,7 +337,7 @@ usage:
   wt new <task> [--from <base>] [--launch <agent>]
       新規 worktree 作成、branch 切り、path を stdout に出力
       --from 省略時は origin/HEAD → main → master を自動検出
-      --launch <agent> で当該 worktree で agent 起動 (例: --launch claude)
+      --launch <agent> 指定時、その worktree で agent 起動 (例: --launch claude)
 
   wt ls
       worktree 一覧 (task / branch / dirty / ahead / behind)
@@ -350,11 +350,11 @@ usage:
       未 commit / 未 push があると拒否、--force で強制
 
   wt cleanup [--dry-run]
-      base に merged された worktree を自動削除
+      base に merge された worktree を自動削除
       --dry-run で削除候補のみ表示
 
   wt enter <task> [--launch <agent>]
-      worktree の path を stdout
+      worktree の path を stdout に出力
       cd 例: cd "$(wt enter <task>)"
 
   wt sync [<task>]
