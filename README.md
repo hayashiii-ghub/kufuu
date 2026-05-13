@@ -16,7 +16,7 @@
 | `tansaku` | 探索 | 追う | バグ調査 / root cause investigation |
 | `shiken` | 試験 | 試す | TDD discipline / PRUNE |
 
-動詞で 4 分割した役割境界が原則。`sadoku` は実装行為を含まない、`kouchiku` が設計から実装までを一気通貫で担う、`tansaku` はバグ専用、`shiken` は TDD discipline 専用。
+動詞で 4 分割した役割境界が原則。`kouchiku` は controller として設計から計画実行までを持ち、原因調査は `tansaku`、TDD discipline は `shiken`、レビュー / PR 文は `sadoku` に handoff block で渡す。
 
 ## install
 
@@ -120,7 +120,7 @@ wt new feat-B --launch claude  # 作成して Claude を起動
 9. **工数はトークンベース**: 判断軸を「行数 / 人間時間」から「token 消費 / context 占有 / API コスト」に切り替え。実行者は AI agent 前提 (§3.9 / 判断 22)
 10. **ファクトチェック**: 知識カットオフ後 / 不確実な事実は利用可能な検索・fetch・一次ソースで裏取りしてから断定 (§3.10 / 判断 23)
 
-詳細と 25 件の設計判断ログは `docs/DESIGN.md` を参照。
+詳細と 26 件の設計判断ログは `docs/DESIGN.md` を参照。
 
 ## ディレクトリ構成
 
@@ -152,7 +152,7 @@ kufuu/
 ├── adapters/                    ← Agent Skills 標準でカバーできない特殊ケース用 (現状は予約領域)
 │   └── README.md
 └── docs/                        ← 設計ドキュメント
-    ├── DESIGN.md                ← 設計書 + 設計判断ログ 25 件 (開発者向け)
+    ├── DESIGN.md                ← 設計書 + 設計判断ログ 26 件 (開発者向け)
     └── workflow.md              ← 使い方ガイド (利用者向け、mermaid 図入り)
 ```
 

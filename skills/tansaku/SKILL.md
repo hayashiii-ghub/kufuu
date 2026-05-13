@@ -67,6 +67,28 @@ GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
 - 過去の修正 commit を grep し、回帰した経路を特定
 - regression guard test を必ず追加 (`shiken` のフォーマットに従う)
 
+## Handoff
+
+原因が確定したら、bugfix 実装や regression guard が必要な場合は `shiken` に渡す。tansaku は root cause と再現条件を固定し、TDD の実装 discipline は持ち込まない。
+
+```
+handoff: shiken
+reason: root cause confirmed; regression guard required
+root cause: [1 文]
+failing behavior: [同 input での before]
+target behavior: [after として期待する状態]
+test target:
+  - [file/module]
+  - [behavior to assert]
+constraints:
+  - mock 呼び出し回数 assert 禁止
+  - production に test-only API 追加禁止
+expected return:
+  - RED log
+  - GREEN log
+  - PRUNE result
+```
+
 ## subagent 並列許可 — gate (c)
 
 3+ の独立した test failure (異なるファイル / サブシステム / 共有 state 無し) のときのみ並列起動許可、最大 3。各 subagent は症状抽出と hypothesis 形成までを担当し、fix 実行は親 controller に戻す。
