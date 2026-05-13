@@ -126,12 +126,13 @@ wt new feat-B --launch claude  # 作成して Claude を起動
 
 ```
 kufuu/
-├── README.md                    ← この入口
+├── README.md                    ← この入口 (人間中心、GitHub で最初に表示)
+├── AGENTS.md                    ← AI agent 入口 + Working Agreements + skill trigger 表
 ├── LICENSE                      ← MIT
 ├── .gitignore
 ├── bin/
 │   └── wt                       ← git worktree CLI (bash)
-├── skills/                      ← skill 実装本体 (SoT、~/.claude/skills/ に配置)
+├── skills/                      ← skill 実装本体 (SoT、npx skills add で配置)
 │   ├── sadoku/
 │   │   ├── SKILL.md
 │   │   └── references/
@@ -148,9 +149,11 @@ kufuu/
 │   └── shiken/
 │       ├── SKILL.md
 │       └── references/testing-anti-patterns.md
+├── adapters/                    ← Agent Skills 標準でカバーできない特殊ケース用 (現状ほぼ空、README のみ)
+│   └── README.md
 └── docs/                        ← 設計ドキュメント
-    ├── DESIGN.md                ← 設計書 + 設計判断ログ 24 件
-    └── workflow.md              ← 使い方ガイド (mermaid 図入り)
+    ├── DESIGN.md                ← 設計書 + 設計判断ログ 24 件 (開発者向け)
+    └── workflow.md              ← 使い方ガイド (利用者向け、mermaid 図入り)
 ```
 
 ## version
