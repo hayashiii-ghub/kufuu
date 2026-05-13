@@ -34,7 +34,33 @@ GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
 
 状態トリガーは誤発火回避のため、検出後に確認 prompt を 1 行挟む (`diff を検出しました。レビューしますか?`)。複数モードが成立しうる場合は発話トリガーを優先。
 
-reviewer コメントへの返信文ドラフトは skill mode 化しない。ユーザが必要に応じて Claude に直接「返信書いて」「押し戻したい」と頼む運用にする (= 通常会話)。実装が必要な指摘はユーザが `kouchiku` に振る (`設計どうする` / `計画実行`)。
+reviewer コメントへの返信文ドラフトは skill mode 化しない。ユーザが必要に応じて agent に直接「返信書いて」「押し戻したい」と頼む運用にする (= 通常会話)。実装が必要な指摘はユーザが `kouchiku` に振る (`設計どうする` / `計画実行`)。
+
+## Handoff Intake
+
+`kouchiku` / `tansaku` / `shiken` からの handoff block がある場合は、diff だけでなく前段の判断と検証ログも review evidence として読む。足りない場合は推測で補完せず、通常レビューの停止条件として扱う。
+
+期待する入力:
+
+```
+handoff: sadoku
+reason: implementation complete; review before PR
+change intent: [何を解決したか]
+files changed:
+  - [path]
+verification:
+  - [command] -> pass / fail
+tdd:
+  - RED: [...]
+  - GREEN: [...]
+  - PRUNE: [...]
+root cause:
+  - [tansaku があれば]
+scope notes:
+  - [やらなかったこと]
+review focus:
+  - [特に見てほしい観点]
+```
 
 ## 通常レビューモード
 

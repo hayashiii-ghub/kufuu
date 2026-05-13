@@ -5,7 +5,7 @@ description: sadoku / kouchiku / tansaku / shiken の境界と典型フロー
 
 # Skill ワークフロー例
 
-> **対象設計書:** `DESIGN.md` v3.1
+> **対象設計書:** `DESIGN.md` v3.2
 > **目的:** 「ユーザーがこう書くと、skill がこう振る舞う」を視覚的に追いやすくする。
 
 ---
@@ -27,7 +27,7 @@ description: sadoku / kouchiku / tansaku / shiken の境界と典型フロー
 
 ## 1. 役割境界
 
-動詞単位で 4 分割。skill 間の主な流れは下図。
+動詞単位で 4 分割。`kouchiku` は controller として handoff 先を選ぶが、原因調査 / TDD / レビューの discipline は各専門 skill に渡す。
 
 ```mermaid
 flowchart TB
@@ -44,11 +44,12 @@ flowchart TB
     T["追う<br/>バグ調査 / root cause"]
   end
 
+  BUILD -->|"原因未確定"| HUNT
+  HUNT -->|"root cause 確定"| TEST
+  HUNT -.->|"調査結果"| BUILD
   BUILD -->|"TDD 必要層"| TEST
+  TEST -->|"検証ログ付き return"| BUILD
   BUILD -->|"実装完了"| REVIEW
-  BUILD -.->|"バグ調査"| HUNT
-  TEST -.->|"バグ調査"| HUNT
-  REVIEW -.->|"バグ調査"| HUNT
 ```
 
 ### skill 一覧
@@ -64,15 +65,17 @@ flowchart TB
 
 ## 2. 典型ワークフロー A: 新機能実装
 
-issue 受領から PR 出荷まで。**kouchiku** が「考える」から「作る」までを一気通貫で担う。
+issue 受領から PR 出荷まで。**kouchiku** が controller として計画を持ち、必要な局面で専門 skill に handoff する。
 
 ```mermaid
 flowchart TB
   A["issue + DoD"] -->|"設計どうする"| B["kouchiku 通常検討<br/>問題定義・案・前提崩し・攻撃検証・Plan"]
-  B -->|"Plan 承認 / 進めて"| C["kouchiku 計画実行<br/>step ごとに inline 実装 + 検証"]
-  C -->|"TDD 必要層なら一時停止"| D["shiken<br/>RED → GREEN → REFACTOR → PRUNE<br/>（失敗・成功・revert を目視）"]
-  D -->|"サイクル完了"| C
-  C -->|"全 step 完了"| E["sadoku 通常レビュー<br/>深さ・停止条件・完了記録"]
+  B -->|"Plan 承認 / 進めて"| C["kouchiku 計画実行<br/>owner skill 付き Plan steps"]
+  C -->|"原因未確定"| I["tansaku<br/>root cause 1文 + evidence"]
+  I -->|"調査結果 return"| C
+  C -->|"TDD 必要層"| D["shiken<br/>RED → GREEN → REFACTOR → PRUNE"]
+  D -->|"検証ログ付き return"| C
+  C -->|"handoff block"| E["sadoku 通常レビュー<br/>深さ・停止条件・完了記録"]
   E -->|"Standard 以上"| F["専門家レビュー<br/>subagent 並列最大3<br/>security / arch / adversarial は inline"]
   F -->|"裏取り済み反映"| G["sadoku PR 説明文<br/>pr-template 8 step"]
   G -->|"PII scan / 4 チェック"| H["PR open"]
@@ -80,7 +83,7 @@ flowchart TB
 
 > **ポイント**
 >
-> - **kouchiku → shiken → kouchiku** の往復は同セッションで起こりうる。
+> - **kouchiku → tansaku / shiken → kouchiku** の往復は handoff block で起こる。
 > - **sadoku** は実装完了後に初めて起動（「見る」専門）。
 > - **専門家レビュー**は Standard 以上のみ。Quick は停止条件中心。
 
@@ -258,16 +261,30 @@ flowchart TB
 | (user)               | kouchiku 通常検討      | 「設計どうする」            | issue + DoD           |
 | (user)               | kouchiku 軽量検討      | 「どうやって直す」          | 修正対象              |
 | (user)               | kouchiku 評価          | 「やる価値ある」            | 判断対象              |
-| kouchiku 通常検討    | kouchiku 計画実行      | 「計画実行」「進めて」      | Plan steps            |
-| kouchiku 計画実行    | shiken                 | TDD 必要層に触れた          | レイヤー判定 + コード |
-| shiken               | kouchiku 計画実行      | サイクル完了              | green 状態のコード    |
-| kouchiku 計画実行    | sadoku 通常レビュー    | 実装完了                    | 完成 diff             |
+| kouchiku 通常検討    | kouchiku 計画実行      | 「計画実行」「進めて」      | owner skill 付き Plan steps |
+| kouchiku 計画実行    | tansaku                | 原因未確定 / test failure   | 症状 + evidence + expected return |
+| tansaku              | kouchiku 計画実行      | root cause 確定             | root cause 1 文 + fix 候補 |
+| kouchiku 計画実行    | shiken                 | TDD 必要層に触れた          | spec / edge case / non-goals |
+| tansaku              | shiken                 | bugfix 確定                 | root cause + failing behavior + test target |
+| shiken               | kouchiku 計画実行      | サイクル完了                | RED/GREEN/PRUNE log + files changed |
+| kouchiku 計画実行    | sadoku 通常レビュー    | 実装完了                    | handoff block + 完成 diff |
 | (user)               | sadoku 通常レビュー    | 「レビューして」            | diff                  |
 | sadoku 通常レビュー  | subagent (reviewer-*)  | gate (b)                    | diff + 範囲           |
 | subagent             | sadoku                 | 評価完了                    | findings（要裏取り）  |
 | sadoku 通常レビュー  | sadoku PR 説明文       | 「PR文書いて」              | レビュー済 diff + scope |
 | (user)               | tansaku                | 「エラー」「動かない」      | バグ症状              |
-| tansaku              | shiken                 | bugfix 確定                 | regression guard 要件 |
+
+handoff block の共通形:
+
+```text
+handoff: [skill]
+reason: [なぜ今渡すか]
+context: [症状 / 仕様 / 設計判断]
+evidence:
+  - [file:line / command output / logs]
+expected return:
+  - [戻してほしい成果物]
+```
 
 ---
 
