@@ -21,6 +21,7 @@
 4. ドキュメントは引き算原則 (§3.8) に従う: 選択肢提示 + 推奨度 N/10 + 1 行根拠 / 図優先
 5. skill discovery は frontmatter `description` を SoT にする。`when_to_use` は非標準の補助メモとして短く残すだけで、同義語を網羅しない
 6. skill 間の連携は `kouchiku` を controller、`tansaku` / `shiken` / `sadoku` を discipline owner とし、handoff block で渡す
+7. agent の応答は問い合わせ言語に合わせる。日本語の問い合わせには自然文 (説明 / 要約 / 提案理由 / 質問) を日本語で返す (skill 内の英語 label と技術用語はそのまま残す)
 
 ## このリポジトリを使う AI agent への指示
 

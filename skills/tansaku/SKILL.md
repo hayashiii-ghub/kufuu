@@ -73,7 +73,7 @@ GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
 
 ```
 handoff: shiken
-reason: root cause confirmed; regression guard required
+reason: root cause 確定、regression guard が必要
 root cause: [1 文]
 failing behavior: [同 input での before]
 target behavior: [after として期待する状態]

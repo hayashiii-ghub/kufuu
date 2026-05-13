@@ -137,7 +137,7 @@ If pivot:   [何に方向転換するか、1 段落]
 
 ```
 handoff: shiken
-reason: implementation touches API behavior
+reason: API の挙動に触れる実装のため
 context: [仕様 / edge case / non-goals]
 evidence:
   - [関連 file:line]
