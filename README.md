@@ -1,6 +1,6 @@
 # kufuu
 
-日本語圏チーム開発向けの Claude Code skill pack + git worktree CLI。tw93/Waza を起点に、SP (anthropic/superpowers) から選択的に取り込み、日本語圏 team-dev に最適化した **core 4 skill** と、並列開発を支える **`wt`** (worktree manager) を含む。
+日本語圏チーム開発向けの Agent Skills 対応 skill pack + git worktree CLI。tw93/Waza を起点に、SP (anthropic/superpowers) から選択的に取り込み、日本語圏 team-dev に最適化した **core 4 skill** と、並列開発を支える **`wt`** (worktree manager) を含む。
 
 「waza (技)」に対して「kufuu (工夫)」— 動詞単位で責務を分けた skill 集。
 
@@ -20,7 +20,7 @@
 
 ## install
 
-kufuu は [Agent Skills 標準](https://agentskills.io) (Anthropic 提唱、2025/12 release) に準拠しています。Claude Code / Cursor / Codex / Gemini CLI / Goose / OpenHands ほか 30+ AI tool で動きます。
+kufuu は [Agent Skills 標準](https://agentskills.io) に沿った **skill pack** です。skills-compatible agent へ `skills` CLI で配置できます。
 
 ### 推奨: `npx skills add` (1 コマンドで現在のハーネスに自動配置)
 
@@ -118,9 +118,9 @@ wt new feat-B --launch claude  # 作成して Claude を起動
 7. **散文は「伝わりやすさ」のみ**: 4 チェック (結論先出し / 1 段落 1 主張 / 読み手語彙 / 儀礼削除)
 8. **引き算 (認知負荷削減)**: 選択肢提示 + 推奨度 N/10 + 1 行根拠 / 図優先 / 読み手の負荷を最優先。kufuu の他原則 (PR 粒度・テスト最小化) と同じ「引き算」哲学を全 skill に貫通させる
 9. **工数はトークンベース**: 判断軸を「行数 / 人間時間」から「token 消費 / context 占有 / API コスト」に切り替え。実行者は AI agent 前提 (§3.9 / 判断 22)
-10. **ファクトチェック**: 知識カットオフ後 / 不確実な事実は Perplexity / Grok / WebSearch / 一次ソース fetch で裏取りしてから断定 (§3.10 / 判断 23)
+10. **ファクトチェック**: 知識カットオフ後 / 不確実な事実は利用可能な検索・fetch・一次ソースで裏取りしてから断定 (§3.10 / 判断 23)
 
-詳細と 24 件の設計判断ログは `docs/DESIGN.md` を参照。
+詳細と 25 件の設計判断ログは `docs/DESIGN.md` を参照。
 
 ## ディレクトリ構成
 
@@ -149,10 +149,10 @@ kufuu/
 │   └── shiken/
 │       ├── SKILL.md
 │       └── references/testing-anti-patterns.md
-├── adapters/                    ← Agent Skills 標準でカバーできない特殊ケース用 (現状ほぼ空、README のみ)
+├── adapters/                    ← Agent Skills 標準でカバーできない特殊ケース用 (現状は予約領域)
 │   └── README.md
 └── docs/                        ← 設計ドキュメント
-    ├── DESIGN.md                ← 設計書 + 設計判断ログ 24 件 (開発者向け)
+    ├── DESIGN.md                ← 設計書 + 設計判断ログ 25 件 (開発者向け)
     └── workflow.md              ← 使い方ガイド (利用者向け、mermaid 図入り)
 ```
 

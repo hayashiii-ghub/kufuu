@@ -1,6 +1,6 @@
 # AGENTS.md
 
-このリポジトリは **kufuu** — 日本語圏チーム開発向けの AI コーディング skill pack です。
+このリポジトリは **kufuu** — 日本語圏チーム開発向けの Agent Skills 対応 skill pack です。Codex plugin ではなく、`skills/` と任意の `bin/wt` CLI を配布単位にします。
 
 ## 構成
 
@@ -11,7 +11,7 @@
   - `shiken` (試験) — TDD discipline / PRUNE
 - **設計原則と判断ログ** は `docs/DESIGN.md`
 - **使い方ガイド** は `docs/workflow.md` (mermaid 図入り)
-- **配置** は `npx skills add github:hayashiii-ghub/kufuu` (Agent Skills 標準準拠、judgment 21)。`adapters/` は標準でカバーできない特殊ケース用の予約領域 (現状は `adapters/README.md` のみ)
+- **配置** は `npx skills add github:hayashiii-ghub/kufuu` (Agent Skills 標準に沿った skill pack、judgment 21)。`adapters/` は標準でカバーできない特殊ケース用の予約領域 (現状は `adapters/README.md` のみ)
 
 ## このリポジトリでの作業ルール
 
@@ -19,6 +19,7 @@
 2. 設計判断は `docs/DESIGN.md` の判断 N に追加 (時系列順)
 3. PR 粒度: 1 issue = 1 PR (kufuu 自身の `sadoku` の停止条件と同じ)
 4. ドキュメントは引き算原則 (§3.8) に従う: 選択肢提示 + 推奨度 N/10 + 1 行根拠 / 図優先
+5. skill discovery は frontmatter `description` を SoT にする。`when_to_use` は非標準の補助メモとして短く残すだけで、同義語を網羅しない
 
 ## このリポジトリを使う AI agent への指示
 

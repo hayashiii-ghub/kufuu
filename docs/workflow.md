@@ -5,7 +5,7 @@ description: sadoku / kouchiku / tansaku / shiken の境界と典型フロー
 
 # Skill ワークフロー例
 
-> **対象設計書:** `DESIGN.md` v3.0  
+> **対象設計書:** `DESIGN.md` v3.1
 > **目的:** 「ユーザーがこう書くと、skill がこう振る舞う」を視覚的に追いやすくする。
 
 ---

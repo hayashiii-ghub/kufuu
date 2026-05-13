@@ -4,7 +4,7 @@
 
 ## なぜ空か
 
-kufuu は [Agent Skills 標準](https://agentskills.io) に準拠しており、以下の方法で 30+ AI tool に配置できます:
+kufuu は [Agent Skills 標準](https://agentskills.io) に沿った skill pack であり、以下の方法で skills-compatible agent に配置できます:
 
 ```bash
 npx skills add github:hayashiii-ghub/kufuu

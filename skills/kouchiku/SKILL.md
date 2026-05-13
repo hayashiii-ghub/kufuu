@@ -1,6 +1,7 @@
 ---
 name: kouchiku
-description: "Design decisions, plan drafting, kill/keep/pivot evaluation, and plan execution — owns both planning and acting on the plan"
+description: "Design decisions, plan drafting, kill/keep/pivot evaluation, and executing approved plans. Use when asked 設計どうする, 方針決めたい, どうやって直す, やる価値ある, 計画実行, 進めて, or to implement an approved plan."
+license: MIT
 when_to_use: "設計判断, 方針決め, design decision, kill or keep, 計画実行"
 metadata:
   version: "2.0.0"

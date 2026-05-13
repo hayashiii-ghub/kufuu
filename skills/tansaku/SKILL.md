@@ -1,6 +1,7 @@
 ---
 name: tansaku
-description: "Bug debugging and root cause investigation — hypothesis-first, evidence-required, no speculative fixes"
+description: "Bug debugging and root cause investigation. Use when asked エラー, 動かない, 落ちる, クラッシュ, バグ調査, root cause, or when a test or app behavior unexpectedly fails."
+license: MIT
 when_to_use: "バグ調査, debugging, root cause, エラー原因, 動かない"
 metadata:
   version: "2.0.0"
@@ -12,7 +13,7 @@ metadata:
 🌲 Using /tansaku for [purpose taken from trigger context].
 ```
 
-> **hypothesis を 1 文書けるまで code を触らない。「とりあえず試す」「自信ある」は調査不足のサイン。**
+> **hypothesis を 1 文書けるまで実装変更しない。「とりあえず試す」「自信ある」は調査不足のサイン。**
 
 バグ / テスト失敗 / 予期せぬ挙動の root cause investigation。
 
@@ -34,13 +35,14 @@ GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
 
 ## Hard Rules
 
-- root cause を 1 文で言語化できるまで code を触らない (`I believe the root cause is [X] because [evidence].`)
+- root cause を 1 文で言語化できるまで実装変更しない (`I believe the root cause is [X] because [evidence].`)
+- grep / read / log 収集 / test 再現は調査行為であり「code を触る」には含めない
 - 同じ症状が修正後も残る = 停止、hypothesis 再構築
 - 3 回失敗したら handoff フォーマットで停止、ユーザに proceed 判断を求める
 - 視覚バグは静的解析優先 (paint / layer trace を先に読む)
 - fix が 5+ ファイル touch なら scope 確認 (= 別 bug の可能性)
 - `Never state from memory. Run grep first.` (識別子・呼び出し関係は実物を確認、記憶で答えない)
-- 外部事実 (OSS の現行仕様 / 最新バージョン / 標準) は知識カットオフ後の可能性、Perplexity / Grok / WebSearch で裏取りしてから引用する (§3.10 ファクトチェック原則)
+- 外部事実 (OSS の現行仕様 / 最新バージョン / 標準) は知識カットオフ後の可能性、利用可能な検索・fetch・一次ソースで裏取りしてから引用する (§3.10 ファクトチェック原則)
 
 ## 通常追跡モード
 

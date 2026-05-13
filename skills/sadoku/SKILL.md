@@ -1,6 +1,7 @@
 ---
 name: sadoku
-description: "PR code review and PR description authoring — observes the diff and writes about it"
+description: "PR code review and PR description authoring. Use when asked レビューして, コードレビュー, PR文書いて, or PR description; also when reviewing a git diff before opening a PR."
+license: MIT
 when_to_use: "PR確認, レビュー, code review, PR description"
 metadata:
   version: "3.0.0"
@@ -55,7 +56,7 @@ Standard 以上で security / architecture 観点が必要な場合のみ subage
 
 5 セクション固定 template と書き方の手順、4 チェック、PII scan、粒度ルールは全て `references/pr-template.md` に集約してある。このモードに入ったら **まず `references/pr-template.md` を読み込み**、そこの手順に従って章ごとに提案する。
 
-SKILL.md 側ではモード起動の判定と完了記録への evidence 引用のみ担う。
+SKILL.md 側ではモード起動の判定と完了記録への evidence 引用のみ担う。停止条件や必須情報欠落がなければ、まずレビュー可能な初稿を 1 回で出す。
 
 ## 停止条件
 
