@@ -97,3 +97,4 @@ PII scan:         clean / found: [...]
 - `pr-template.md` — PR 説明文モードの本体 (5 セクション template / 書き方手順 / 4 チェック / PII scan / 粒度ルール)
 - `project-context.md` — diff 読解時の文脈抽出方針
 - `persona-catalog.md` — 専門家レビュー (security / architecture / adversarial) の persona 起動条件
+- `agents/reviewer-security.md` / `agents/reviewer-architecture.md` — 専門家レビュー subagent prompt

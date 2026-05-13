@@ -271,7 +271,7 @@ flowchart TB
 | PR テンプレ | `../skills/sadoku/references/pr-template.md` |
 | persona  | `../skills/sadoku/references/persona-catalog.md` |
 | 文脈抽出 | `../skills/sadoku/references/project-context.md` |
-| subagent | `../skills/sadoku/agents/reviewer-security.md`, `reviewer-architecture.md` |
+| subagent | `../skills/sadoku/references/agents/reviewer-security.md`, `reviewer-architecture.md` |
 | kouchiku | `../skills/kouchiku/SKILL.md` |
 | tansaku  | `../skills/tansaku/SKILL.md`, `../skills/tansaku/references/logging-techniques.md` |
 | shiken   | `../skills/shiken/SKILL.md`, `../skills/shiken/references/testing-anti-patterns.md` |

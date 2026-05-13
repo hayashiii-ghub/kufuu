@@ -35,7 +35,7 @@
 | Secret | log への混入 / commit message / response body |
 | SSRF | 内部 IP / metadata endpoint に到達可能か |
 
-prompt 詳細: `agents/reviewer-security.md`
+prompt 詳細: `references/agents/reviewer-security.md`
 
 ### architecture
 
@@ -57,7 +57,7 @@ prompt 詳細: `agents/reviewer-security.md`
 | 命名一貫性 | 既存 convention 踏襲か |
 | 拡張余地 | 6 ヶ月後の変更に対応できる粒度か |
 
-prompt 詳細: `agents/reviewer-architecture.md`
+prompt 詳細: `references/agents/reviewer-architecture.md`
 
 ### adversarial
 

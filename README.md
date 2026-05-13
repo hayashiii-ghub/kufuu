@@ -18,17 +18,50 @@
 
 動詞で 4 分割した役割境界が原則。`sadoku` は実装行為を含まない、`kouchiku` が設計から実装までを一気通貫、`tansaku` はバグ専用、`shiken` は TDD discipline 専用。
 
-## install (deploy)
+## install
 
-ハーネス (AI コーディングツール) ごとに deploy 手順が違うため、`adapters/<harness>/README.md` を参照してください。
+kufuu は [Agent Skills 標準](https://agentskills.io) (Anthropic 提唱、2025/12 release) に準拠しています。Claude Code / Cursor / Codex / Gemini CLI / Goose / OpenHands ほか 30+ AI tool で動きます。
 
-| ハーネス | 状態 | adapter |
-|---|---|---|
-| Claude Code | 対応済 | [`adapters/claude-code/`](./adapters/claude-code/README.md) |
-| Cursor | 未対応 (土台のみ) | [`adapters/cursor/`](./adapters/cursor/README.md) |
-| Codex | 未対応 (土台のみ) | [`adapters/codex/`](./adapters/codex/README.md) |
+### 推奨: `npx skills add` (1 コマンドで現在のハーネスに自動配置)
 
-skill 本体 (`skills/`) はハーネス agnostic な SoT。adapter は配置 / 変換手順を提供するのみ。新ハーネス対応は `adapters/<name>/` を 1 つ作るだけで済む構造。
+```bash
+npx skills add github:hayashiii-ghub/kufuu
+```
+
+`-g` で global、`-a <agent>` で対象指定可能。詳細は [vercel-labs/skills](https://github.com/vercel-labs/skills) 参照。
+
+### 動作確認済の検出例
+
+```
+◇  Found 4 skills
+   sadoku    — PR code review and PR description authoring
+   kouchiku  — Design decisions, plan drafting, kill/keep/pivot evaluation, and plan execution
+   tansaku   — Bug debugging and root cause investigation
+   shiken    — TDD discipline: write failing test first, witness it fail, ...
+```
+
+### 手動配置 (npx を使わない場合)
+
+`skills/<name>/` を各ツールの skills dir にコピー or symlink:
+
+| ツール | path |
+|---|---|
+| Claude Code | `~/.claude/skills/` (global) または `./.claude/skills/` (project) |
+| Cursor / Codex / OpenCode / Cline 等 | `~/.agents/skills/` または `./.agents/skills/` (共通標準) |
+| Cursor 個別 | `.cursor/skills/` も対応 |
+
+### bin/wt (worktree CLI)
+
+kufuu 同梱の bash CLI、`npx skills add` 対象外。手動 install:
+
+```bash
+ln -s "$(pwd)/bin/wt" ~/.local/bin/wt
+wt help
+```
+
+### 既存 waza skill との衝突
+
+waza の `kakunin` / `kentou` / `tsuiseki` 等とは skill 名が違うので衝突しません (kufuu は sadoku / kouchiku / tansaku / shiken)。共存可能。
 
 ## install (wt — git worktree CLI)
 
@@ -99,13 +132,13 @@ kufuu/
 ├── skills/                      ← skill 実装本体 (SoT、~/.claude/skills/ に配置)
 │   ├── sadoku/
 │   │   ├── SKILL.md
-│   │   ├── references/
-│   │   │   ├── pr-template.md
-│   │   │   ├── project-context.md
-│   │   │   └── persona-catalog.md
-│   │   └── agents/
-│   │       ├── reviewer-security.md
-│   │       └── reviewer-architecture.md
+│   │   └── references/
+│   │       ├── pr-template.md
+│   │       ├── project-context.md
+│   │       ├── persona-catalog.md
+│   │       └── agents/
+│   │           ├── reviewer-security.md
+│   │           └── reviewer-architecture.md
 │   ├── kouchiku/SKILL.md
 │   ├── tansaku/
 │   │   ├── SKILL.md
