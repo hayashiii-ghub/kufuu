@@ -40,6 +40,7 @@ GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
 - 視覚バグは静的解析優先 (paint / layer trace を先に読む)
 - fix が 5+ ファイル touch なら scope 確認 (= 別 bug の可能性)
 - `Never state from memory. Run grep first.` (識別子・呼び出し関係は実物を確認、記憶で答えない)
+- 外部事実 (OSS の現行仕様 / 最新バージョン / 標準) は知識カットオフ後の可能性、Perplexity / Grok / WebSearch で裏取りしてから引用する (§3.10 ファクトチェック原則)
 
 ## 通常追跡モード
 
