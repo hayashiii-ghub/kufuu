@@ -10,7 +10,7 @@
   - `tansaku` (探索) — バグ調査 / root cause investigation
   - `shiken` (試験) — TDD discipline / PRUNE
 - **設計原則と判断ログ** は `docs/DESIGN.md`
-- **使い方ガイド** は `docs/workflow.md` / `docs/workflow.html`
+- **使い方ガイド** は `docs/workflow.md` (mermaid 図入り)
 - **ハーネス別配置** は `adapters/<harness>/README.md`
 
 ## このリポジトリでの作業ルール

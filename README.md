@@ -105,7 +105,7 @@ wt new feat-B --launch claude  # 作成して Claude を起動
 "TDDで" / "テストから書いて" → shiken
 ```
 
-詳しい trigger 一覧と mode 切替は `docs/workflow.md` (markdown 版) または `docs/workflow.html` (visual 版) を参照。
+詳しい trigger 一覧と mode 切替は `docs/workflow.md` (mermaid 図入り) を参照。
 
 ## 設計原則
 
@@ -149,10 +149,8 @@ kufuu/
 │       ├── SKILL.md
 │       └── references/testing-anti-patterns.md
 └── docs/                        ← 設計ドキュメント
-    ├── DESIGN.md                ← 設計書 + 設計判断ログ 17 件
-    ├── workflow.md              ← 使い方ガイド (markdown、mermaid 図入り)
-    ├── workflow.html            ← 使い方ガイド (visual 版、CSS box)
-    └── WT-SPEC.md               ← wt 仕様書
+    ├── DESIGN.md                ← 設計書 + 設計判断ログ 24 件
+    └── workflow.md              ← 使い方ガイド (mermaid 図入り)
 ```
 
 ## version
