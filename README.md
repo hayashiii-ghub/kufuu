@@ -92,9 +92,31 @@ wt new feat-B --launch claude  # 作成して Claude を起動
 
 `.worktrees/` は repo 内に作られるので、 `.gitignore` に追加するのを推奨 (kufuu 自身は既に追加済)。
 
-## quick start
+## quick start (30 秒)
 
-各 skill は発話トリガーで起動する。
+install + 最初の発話 1 つで動く状態にする手順。
+
+1. install (Cursor の場合):
+
+   ```bash
+   npx skills add -g -a cursor github:hayashiii-ghub/kufuu
+   ```
+
+   Claude Code は `-a claude-code`、Codex は `-a codex` 等に差し替え。詳細は [install](#install) 参照。
+
+2. agent を起動して発話:
+
+   ```
+   コードレビューして
+   ```
+
+   → `sadoku` が起動して review が走る。
+
+3. 他の trigger は下の [trigger 早見表](#trigger-早見表) を参照。
+
+## trigger 早見表
+
+install 後、各 skill は発話で起動する。
 
 ```
 "設計どうする"           → kouchiku 通常検討
