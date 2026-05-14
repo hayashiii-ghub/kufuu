@@ -28,13 +28,13 @@ kufuu は [Agent Skills 標準](https://agentskills.io) に沿った **skill pac
 
 ```bash
 # Cursor
-npx skills add -g -a cursor github:hayashiii-ghub/kufuu
+npx skills add github:hayashiii-ghub/kufuu -g -a cursor
 
 # Claude Code
-npx skills add -g -a claude-code github:hayashiii-ghub/kufuu
+npx skills add github:hayashiii-ghub/kufuu -g -a claude-code
 
 # Codex
-npx skills add -g -a codex github:hayashiii-ghub/kufuu
+npx skills add github:hayashiii-ghub/kufuu -g -a codex
 ```
 
 `-g` で global (home dir)、省略時は cwd の project local。`-a` 無しだと現在のハーネスを auto-detect。詳細は [vercel-labs/skills](https://github.com/vercel-labs/skills) 参照。
@@ -98,7 +98,7 @@ install + 最初の発話 1 つで動く状態にする手順。
 1. install (Cursor の場合):
 
    ```bash
-   npx skills add -g -a cursor github:hayashiii-ghub/kufuu
+   npx skills add github:hayashiii-ghub/kufuu -g -a cursor
    ```
 
    Claude Code は `-a claude-code`、Codex は `-a codex` 等に差し替え。詳細は [install (skill pack)](#install-skill-pack) 参照。
