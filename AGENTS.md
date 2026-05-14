@@ -9,23 +9,21 @@
   - `kouchiku` (構築) — 設計判断 / 計画策定 / 計画実行
   - `tansaku` (探索) — バグ調査 / root cause investigation
   - `shiken` (試験) — TDD discipline / PRUNE
-- **設計原則と判断ログ** は `docs/DESIGN.md`
 - **使い方ガイド** は `docs/workflow.md` (mermaid 図入り)
-- **配置** は `npx skills add github:hayashiii-ghub/kufuu` (Agent Skills 標準に沿った skill pack、判断 21)。`adapters/` は標準でカバーできない特殊ケース用の予約領域 (現状は `adapters/README.md` のみ)
+- **配置** は `npx skills add github:hayashiii-ghub/kufuu` (Agent Skills 標準に沿った skill pack)。`adapters/` は標準でカバーできない特殊ケース用の予約領域 (現状は `adapters/README.md` のみ)
 
 ## このリポジトリでの作業ルール
 
 1. skill 本体 (`skills/`) はハーネス agnostic に書く。Claude Code / Cursor / Codex 等の固有 API 名は本文に出さない (出す場合は `adapters/` に隔離 or 注釈で明示)
-2. 設計判断は `docs/DESIGN.md` の判断 N に追加 (時系列順)
-3. PR 粒度: 1 issue = 1 PR (kufuu 自身の `sadoku` の停止条件と同じ)
-4. ドキュメントは引き算原則 (§3.8) に従う: 選択肢提示 + 推奨度 N/10 + 1 行根拠 / 図優先
-5. skill discovery は frontmatter `description` を SoT にする。`when_to_use` は非標準の補助メモとして短く残すだけで、同義語を網羅しない
-6. skill 間の連携は `kouchiku` を controller、`tansaku` / `shiken` / `sadoku` を discipline owner とし、handoff block で渡す
-7. agent の応答は問い合わせ言語に合わせる。日本語の問い合わせには自然文 (説明 / 要約 / 提案理由 / 質問) を日本語で返す (skill 内の英語 label と技術用語はそのまま残す)
+2. PR 粒度: 1 issue = 1 PR (kufuu 自身の `sadoku` の停止条件と同じ)
+3. ドキュメントは引き算原則に従う: 選択肢提示 + 推奨度 N/10 + 1 行根拠 / 図優先
+4. skill discovery は frontmatter `description` を SoT にする。`when_to_use` は非標準の補助メモとして短く残すだけで、同義語を網羅しない
+5. skill 間の連携は `kouchiku` を controller、`tansaku` / `shiken` / `sadoku` を discipline owner とし、handoff block で渡す
+6. agent の応答は問い合わせ言語に合わせる。日本語の問い合わせには自然文 (説明 / 要約 / 提案理由 / 質問) を日本語で返す (skill 内の英語 label と技術用語はそのまま残す)
 
 ## このリポジトリを使う AI agent への指示
 
-- README.md と docs/DESIGN.md を最初に読む
+- README.md を最初に読む
 - `bin/wt` は git worktree CLI、kufuu pack 同梱の補助ツール
 - skill の発動 trigger は下記「skill の発動 trigger 一覧」を参照、詳細仕様は各 SKILL.md
 
