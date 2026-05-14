@@ -18,27 +18,37 @@
 
 動詞で 4 分割した役割境界が原則。`kouchiku` は controller として設計から計画実行までを持ち、原因調査は `tansaku`、TDD discipline は `shiken`、レビュー / PR 文は `sadoku` に handoff block で渡す。
 
-## install
+## install (skill pack)
 
 kufuu は [Agent Skills 標準](https://agentskills.io) に沿った **skill pack** です。skills-compatible agent へ `skills` CLI で配置できます。
 
-### 推奨: `npx skills add` (1 コマンドで現在のハーネスに自動配置)
+### 推奨: `npx skills add` (1 コマンドで自動配置)
+
+ハーネス別の例:
 
 ```bash
-npx skills add github:hayashiii-ghub/kufuu
+# Cursor
+npx skills add -g -a cursor github:hayashiii-ghub/kufuu
+
+# Claude Code
+npx skills add -g -a claude-code github:hayashiii-ghub/kufuu
+
+# Codex
+npx skills add -g -a codex github:hayashiii-ghub/kufuu
 ```
 
-`-g` で global、`-a <agent>` で対象指定可能。詳細は [vercel-labs/skills](https://github.com/vercel-labs/skills) 参照。
+`-g` で global (home dir)、省略時は cwd の project local。`-a` 無しだと現在のハーネスを auto-detect。詳細は [vercel-labs/skills](https://github.com/vercel-labs/skills) 参照。
 
-### 動作確認済の検出例
+### 配置の仕組み (2 段構造)
+
+`skills` CLI は **canonical store + agent symlink** の 2 段で配置する:
 
 ```
-◇  Found 4 skills
-   sadoku    — PR code review and PR description authoring
-   kouchiku  — Design decisions, plan drafting, kill/keep/pivot evaluation, and plan execution
-   tansaku   — Bug debugging and root cause investigation
-   shiken    — TDD discipline: write failing test first, witness it fail, ...
+~/.agents/skills/<skill>/   ← 実体 (canonical store, 全 agent 共通)
+~/.<agent>/skills/<skill>   ← canonical への symlink (各 agent が読む)
 ```
+
+Cursor は `~/.cursor/skills/`、Claude Code は `~/.claude/skills/` を auto-discovery 対象にする。`~/.agents/skills/` のみ読むのは Cline / OpenCode 等 universal 系。
 
 ### 手動配置 (npx を使わない場合)
 
@@ -46,22 +56,11 @@ npx skills add github:hayashiii-ghub/kufuu
 
 | ツール | path |
 |---|---|
+| Cursor | `~/.cursor/skills/` (global) または `./.cursor/skills/` (project) |
 | Claude Code | `~/.claude/skills/` (global) または `./.claude/skills/` (project) |
-| Cursor / Codex / OpenCode / Cline 等 | `~/.agents/skills/` または `./.agents/skills/` (共通標準) |
-| Cursor 個別 | `.cursor/skills/` も対応 |
+| Cline / OpenCode 等 universal | `~/.agents/skills/` または `./.agents/skills/` |
 
-### bin/wt (worktree CLI)
-
-kufuu 同梱の bash CLI、`npx skills add` 対象外。手動 install:
-
-```bash
-ln -s "$(pwd)/bin/wt" ~/.local/bin/wt
-wt help
-```
-
-### 既存 waza skill との衝突
-
-waza の `kakunin` / `kentou` / `tsuiseki` 等とは skill 名が違うので衝突しません (kufuu は sadoku / kouchiku / tansaku / shiken)。共存可能。
+waza の `kakunin` / `kentou` / `tsuiseki` 等とは skill 名が違うので衝突せず共存可能。
 
 ## install (wt — git worktree CLI)
 
@@ -102,7 +101,7 @@ install + 最初の発話 1 つで動く状態にする手順。
    npx skills add -g -a cursor github:hayashiii-ghub/kufuu
    ```
 
-   Claude Code は `-a claude-code`、Codex は `-a codex` 等に差し替え。詳細は [install](#install) 参照。
+   Claude Code は `-a claude-code`、Codex は `-a codex` 等に差し替え。詳細は [install (skill pack)](#install-skill-pack) 参照。
 
 2. agent を起動して発話:
 
