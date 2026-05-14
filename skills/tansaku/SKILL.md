@@ -1,6 +1,6 @@
 ---
 name: tansaku
-description: "Bug debugging and root cause investigation. Use when asked エラー, 動かない, 落ちる, クラッシュ, バグ調査, root cause, or when a test or app behavior unexpectedly fails."
+description: "Use this skill when something is broken and the cause is unclear — bugs, crashes, errors, regressions, unexpected test failures, behavior that doesn't match expectations — including phrasings エラー, 動かない, 落ちる, クラッシュ, バグ調査, 前は動いてた, アップデート後から, 同じ問題が再発, root cause, debug. Activate on mysterious test failures or features that used to work — even without explicit 'bug' wording."
 license: MIT
 when_to_use: "バグ調査, debugging, root cause, エラー原因, 動かない"
 metadata:

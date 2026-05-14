@@ -1,6 +1,6 @@
 ---
 name: sadoku
-description: "PR code review, simplify findings, and PR description authoring. Use when asked レビューして, コードレビュー, 整理して, simplify, PR文書いて, or PR description; also when reviewing a git diff before opening a PR."
+description: "Use this skill when the user wants code reviewed, findings simplified, or a PR description written — including the phrasings レビューして, コードレビュー, 整理して, simplify, PR文書いて, PR description. Activate after implementation, when reviewing a git diff before opening a PR, or when restructuring messy findings — even when the user doesn't say 'review' explicitly."
 license: MIT
 when_to_use: "PR確認, レビュー, code review, 整理, simplify, PR description"
 metadata:

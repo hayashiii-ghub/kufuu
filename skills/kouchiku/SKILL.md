@@ -1,6 +1,6 @@
 ---
 name: kouchiku
-description: "Design decisions, plan drafting, kill/keep/pivot evaluation, and executing approved plans. Use when asked 設計どうする, 方針決めたい, どうやって直す, やる価値ある, 計画実行, 進めて, or to implement an approved plan."
+description: "Use this skill when the user wants help deciding how to build something, evaluating whether to keep/kill/pivot an approach, drafting an implementation plan, or executing an approved plan — including phrasings 設計どうする, 方針決めたい, どうやって直す, やり方どっち, やる価値ある, 採用すべきか, kill か keep か, 計画実行, 進めて, 着手. Activate when discussing technical trade-offs, or when the user just got approval and wants implementation — even without explicit 'design' or 'plan' wording."
 license: MIT
 when_to_use: "設計判断, 方針決め, design decision, kill or keep, 計画実行"
 metadata:
